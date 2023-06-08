@@ -1,0 +1,18 @@
+import qiskit as qk
+
+q = qk.QuantumRegister(3)
+c = qk.ClassicalRegister(3)
+circuit = qk.QuantumCircuit(q, c)
+
+# We want 101, so the fifth. This is 0-indexed. So the sixth place:
+circuit.initialize([0, 0, 0, 0, 0, 1, 0, 0], [q[0], q[1], q[2]])
+circuit.h(q[0])
+circuit.h(q[1])
+circuit.h(q[2])
+print(circuit)
+
+simulator = qk.BasicAer.get_backend('statevector_simulator')
+job = qk.execute(circuit, simulator)
+ket = job.result().get_statevector()
+for amplitude in ket:
+    print(amplitude)
